@@ -5,7 +5,7 @@
 </div>
 <div id="">
   <input id="width" value="4"> : <input id="height" value="3">
-  <input id="targetWidth" value="240"> : <input id="targetHeight" value="180">
+  <input id="targetWidth" value=""> : <input id="targetHeight" value="">
 </div>
 <div id="">
   <button id="clearValue">Clear value</button>
@@ -22,10 +22,42 @@
     document.getElementById('originHeight').innerText = height;
   };
 
+  const widthForm = document.getElementById('width');
+  const heightForm = document.getElementById('height');
+  const targetWidthForm = document.getElementById('targetWidth');
+  const targetHeightForm = document.getElementById('targetHeight');
+  console.log(parseInt(widthForm.value, 10));
+  const calculateHeight = () => {
+    console.log("hit");
+    const width = parseInt(widthForm.value, 10);
+    const height = parseInt(heightForm.value, 10);
+    const targetWidth = parseInt(targetWidthForm.value, 10);
+    console.log([width, height, targetWidth, targetWidth * height / width]);
+    targetHeightForm.value = targetWidth * height / width;
+  }
+  widthForm.addEventListener('input', calculateHeight);
+  heightForm.addEventListener('input', calculateHeight);
+  targetWidthForm.addEventListener('input', calculateHeight);
+
   document.getElementById('resize').onclick = () => {
     const width = parseInt(document.getElementById('targetWidth').value, 10);
     const height = parseInt(document.getElementById('targetHeight').value, 10);
     parent.postMessage({ pluginMessage: { type: 'resize', width, height } }, '*');
   };
+  document.getElementById('clearValue').onclick = () => {
+    widthForm.value = "";
+    heightForm.value = "";
+    targetWidthForm.value = "";
+    targetHeightForm.value = "";
+  }
+  document.getElementById('switchValue').onclick = () => {
+    let temp = widthForm.value;
+    widthForm.value = heightForm.value;
+    heightForm.value = temp;
+    
+    temp = targetWidthForm.value;
+    targetWidthForm.value = targetHeightForm.value;
+    targetHeightForm.value = temp;
+  }
 
 </script>

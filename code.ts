@@ -11,7 +11,7 @@ const getData = (): void => {
   if (node) {
     const { width, height } = node;
     const denom = gcd(width, height);
-    const ratio = `${width / denom} / ${height / denom}`;
+    const ratio = `${width / denom} : ${height / denom}`;
     figma.ui.postMessage({ ratio, width, height });
   }
   selectedNode = node;
