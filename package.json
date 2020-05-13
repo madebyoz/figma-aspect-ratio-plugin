@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@figma/plugin-typings": "^1.15.0"
+  }
+}
