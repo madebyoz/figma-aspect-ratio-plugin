@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Figma Aspect Ratio</title>
+    <link rel="stylesheet" href="/node_modules/figma-plugin-ds/dist/figma-plugin-ds.css">
+</head>
+
 <div id="">
   Ratio: <span id="originRatio"></span>
   Width: <span id="originWidth"></span>
@@ -10,8 +17,21 @@
 <div id="">
   <button id="clearValue">Clear value</button>
   <button id="switchValue">Switch value</button>
-  <button id="resize">Resize</button>
+  <button id="resize" class="button button--primary">Resize</button>
 </div>
+
+
+<!-- Icon -->
+<div class="icon icon--theme"></div>
+
+<!-- Icon with blue modifier class to change color -->
+<div class="icon icon--theme icon--blue"></div>
+
+<!-- Spinner icon with spinning animation-->
+<div class="icon icon--spinner icon--spin"></div>
+
+<!-- Text icon -->
+<div class="icon">W</div>
 
 <script>
   onmessage = (e) => {
@@ -70,3 +90,4 @@
   }
 
 </script>
+</html>
