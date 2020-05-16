@@ -10,22 +10,35 @@
     </head>
     <body>
 
-<div id="">
-    Ratio: <span id="originRatio"></span>
-    Width: <span id="originWidth"></span>
-    Height: <span id="originHeight"></span>
+<div class="wrapper">
+
+<div class="inspector">
+  <div class="inspector__item"><img src="./img/icon-inspector.svg"></div>  
+  <div class="inspector__item">Ratio<span id="originRatio" class="inspector__item__value">0:0</span></div>
+  <div class="inspector__item">Width<span id="originWidth" class="inspector__item__value">0</span></div>
+  <div class="inspector__item">Height<span id="originHeight" class="inspector__item__value">0</span></div>
+</div>
+
+
+<div class="calcrator">
+  <div class="input">
+    <input type="input" id="width" class="input__field" value="4" placeholder="x"> : <input type="input" id="height" class="input__field" value="3" placeholder="y">
   </div>
-  <div id="">
-    <input id="width" value="4"> : <input id="height" value="3">
-    <input id="targetWidth" value=""> : <input id="targetHeight" value="">
+  <div class="divider"></div>
+  <div class="input">
+    <input id="targetWidth" class="input__field" value="0" placeholder="0"> : <input id="targetHeight" class="input__field targetHeight" value="0" placeholder="0">
   </div>
-  <div id="">
-    <button id="clearValue">Clear value</button>
-    <button id="switchValue">Switch value</button>
+</div>
+
+
+  <div id="actionBar" class="actionBar">
+    <button id="clearValue" class="button button--tertiary">Clear value</button>
+    <button id="switchValue" class="button button--tertiary">Switch value</button>
     <button id="resize" class="button button--primary">Resize</button>
   </div>
   
-  
+  </div>
+
   <script>
     onmessage = (e) => {
       const { ratio, width, height } = e.data.pluginMessage;
