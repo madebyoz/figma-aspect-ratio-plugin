@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="./tmp/figma-plugin-ds.css"> <!-- Figma Plugin DS Styles -->
+        <link rel="stylesheet" href="./tmp/styles.css"> <!-- Your Styles -->
+    </head>
+    <body>
+
+<div id="">
+    Ratio: <span id="originRatio"></span>
+    Width: <span id="originWidth"></span>
+    Height: <span id="originHeight"></span>
+  </div>
+  <div id="">
+    <input id="width" value="4"> : <input id="height" value="3">
+    <input id="targetWidth" value=""> : <input id="targetHeight" value="">
+  </div>
+  <div id="">
+    <button id="clearValue">Clear value</button>
+    <button id="switchValue">Switch value</button>
+    <button id="resize" class="button button--primary">Resize</button>
+  </div>
+  
+  
+  <script>
+    onmessage = (e) => {
+      const { ratio, width, height } = e.data.pluginMessage;
+      console.log("got this from the plugin code:", e.data.pluginMessage);
+      document.getElementById('originRatio').innerText = ratio;
+      document.getElementById('originWidth').innerText = width;
+      document.getElementById('originHeight').innerText = height;
+    };
+  
+    const widthForm = document.getElementById('width');
+    const heightForm = document.getElementById('height');
+    const targetWidthForm = document.getElementById('targetWidth');
+    const targetHeightForm = document.getElementById('targetHeight');
+    console.log(parseInt(widthForm.value, 10));
+    const calculateHeight = () => {
+      console.log("hit");
+      const width = parseInt(widthForm.value, 10);
+      const height = parseInt(heightForm.value, 10);
+      const targetWidth = parseInt(targetWidthForm.value, 10);
+      console.log([width, height, targetWidth, targetWidth * height / width]);
+      targetHeightForm.value = targetWidth * height / width;
+    }
+    widthForm.addEventListener('input', calculateHeight);
+    heightForm.addEventListener('input', calculateHeight);
+    targetWidthForm.addEventListener('input', calculateHeight);
+  
+    document.getElementById('resize').onclick = () => {
+      const width = parseInt(document.getElementById('targetWidth').value, 10);
+      const height = parseInt(document.getElementById('targetHeight').value, 10);
+      parent.postMessage({ pluginMessage: { type: 'resize', width, height } }, '*');
+  
+      const gcd = (a, b) => {
+        return b == 0 ? a : gcd(b, a % b);
+      };
+      const denom = gcd(width, height);
+      const ratio = `${width / denom} : ${height / denom}`;
+      document.getElementById('originRatio').innerText = ratio;
+      document.getElementById('originWidth').innerText = width;
+      document.getElementById('originHeight').innerText = height;
+    };
+    document.getElementById('clearValue').onclick = () => {
+      widthForm.value = "";
+      heightForm.value = "";
+      targetWidthForm.value = "";
+      targetHeightForm.value = "";
+    }
+    document.getElementById('switchValue').onclick = () => {
+      let temp = widthForm.value;
+      widthForm.value = heightForm.value;
+      heightForm.value = temp;
+  
+      temp = targetWidthForm.value;
+      targetWidthForm.value = targetHeightForm.value;
+      targetHeightForm.value = temp;
+    }
+  
+  </script>
+    </body>
+</html>
+
+
