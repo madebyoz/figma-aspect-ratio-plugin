@@ -55,7 +55,7 @@
       const width = parseFloat(widthForm.value, 10);
       const height = parseFloat(heightForm.value, 10);
       const targetWidth = parseFloat(targetWidthForm.value, 10);
-      targetHeightForm.value = targetWidth * height / width;
+      targetHeightForm.value = Math.round(targetWidth * height / width * Math.pow(10, 3)) / Math.pow(10, 3);
     }
     widthForm.addEventListener('input', calculateHeight);
     heightForm.addEventListener('input', calculateHeight);
