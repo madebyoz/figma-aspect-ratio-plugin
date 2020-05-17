@@ -26,7 +26,6 @@ figma.on("selectionchange", () => {
 });
 
 figma.ui.onmessage = msg => {
-  console.log(msg);
   if (msg.type === "resize") {
     setData(msg.width, msg.height);
   }

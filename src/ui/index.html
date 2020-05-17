@@ -42,7 +42,6 @@
   <script>
     onmessage = (e) => {
       const { ratio, width, height } = e.data.pluginMessage;
-      console.log("got this from the plugin code:", e.data.pluginMessage);
       document.getElementById('originRatio').innerText = ratio;
       document.getElementById('originWidth').innerText = width;
       document.getElementById('originHeight').innerText = height;
@@ -52,13 +51,10 @@
     const heightForm = document.getElementById('height');
     const targetWidthForm = document.getElementById('targetWidth');
     const targetHeightForm = document.getElementById('targetHeight');
-    console.log(parseInt(widthForm.value, 10));
     const calculateHeight = () => {
-      console.log("hit");
-      const width = parseInt(widthForm.value, 10);
-      const height = parseInt(heightForm.value, 10);
-      const targetWidth = parseInt(targetWidthForm.value, 10);
-      console.log([width, height, targetWidth, targetWidth * height / width]);
+      const width = parseFloat(widthForm.value, 10);
+      const height = parseFloat(heightForm.value, 10);
+      const targetWidth = parseFloat(targetWidthForm.value, 10);
       targetHeightForm.value = targetWidth * height / width;
     }
     widthForm.addEventListener('input', calculateHeight);
@@ -66,8 +62,8 @@
     targetWidthForm.addEventListener('input', calculateHeight);
   
     document.getElementById('resize').onclick = () => {
-      const width = parseInt(document.getElementById('targetWidth').value, 10);
-      const height = parseInt(document.getElementById('targetHeight').value, 10);
+      const width = parseFloat(document.getElementById('targetWidth').value, 10);
+      const height = parseFloat(document.getElementById('targetHeight').value, 10);
       parent.postMessage({ pluginMessage: { type: 'resize', width, height } }, '*');
   
       const gcd = (a, b) => {
