@@ -1,4 +1,4 @@
-let selectedNode;
+let selectedNode: SceneNode;
 
 figma.showUI(__html__, { width: 320, height: 280 });
 
@@ -17,7 +17,7 @@ const getData = (): void => {
   selectedNode = node;
 };
 
-const setData = (width, height): void => {
+const setData = (width: number, height: number): void => {
   selectedNode.resize(width, height);
 };
 
@@ -31,3 +31,4 @@ figma.ui.onmessage = msg => {
     setData(msg.width, msg.height);
   }
 };
+
