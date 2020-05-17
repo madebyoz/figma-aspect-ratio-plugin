@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="./tmp/figma-plugin-ds.css"> <!-- Figma Plugin DS Styles -->
+        <link rel="stylesheet" href="./tmp/styles.css"> <!-- Your Styles -->
+    </head>
+    <body>
+
+<div class="wrapper">
+
+<div class="inspector">
+  <div class="inspector__item"><img src="./img/icon-inspector.svg"></div>  
+  <div class="inspector__item">Ratio<span id="originRatio" class="inspector__item__value">0:0</span></div>
+  <div class="inspector__item">Width<span id="originWidth" class="inspector__item__value">0</span></div>
+  <div class="inspector__item">Height<span id="originHeight" class="inspector__item__value">0</span></div>
+</div>
+
+
+<div class="calcrator">
+  <div class="input">
+    <input type="input" id="width" class="input__field" value="4" placeholder="x"> : <input type="input" id="height" class="input__field" value="3" placeholder="y">
+  </div>
+  <div class="divider"></div>
+  <div class="input">
+    <input id="targetWidth" class="input__field" value="0" placeholder="0"> : <input id="targetHeight" class="input__field targetHeight" value="0" placeholder="0">
+  </div>
+</div>
+
+
+  <div id="actionBar" class="actionBar">
+    <button id="clearValue" class="button button--tertiary">Clear value</button>
+    <button id="switchValue" class="button button--tertiary">Switch value</button>
+    <button id="resize" class="button button--primary">Resize</button>
+  </div>
+  
+  </div>
+
+  <script>
+    onmessage = (e) => {
+      const { ratio, width, height } = e.data.pluginMessage;
+      document.getElementById('originRatio').innerText = ratio;
+      document.getElementById('originWidth').innerText = width;
+      document.getElementById('originHeight').innerText = height;
+    };
+  
+    const widthForm = document.getElementById('width');
+    const heightForm = document.getElementById('height');
+    const targetWidthForm = document.getElementById('targetWidth');
+    const targetHeightForm = document.getElementById('targetHeight');
+    const calculateHeight = () => {
+      const width = parseFloat(widthForm.value, 10);
+      const height = parseFloat(heightForm.value, 10);
+      const targetWidth = parseFloat(targetWidthForm.value, 10);
+      targetHeightForm.value = Math.round(targetWidth * height / width * Math.pow(10, 3)) / Math.pow(10, 3);
+    }
+    widthForm.addEventListener('input', calculateHeight);
+    heightForm.addEventListener('input', calculateHeight);
+    targetWidthForm.addEventListener('input', calculateHeight);
+  
+    document.getElementById('resize').onclick = () => {
+      const width = parseFloat(document.getElementById('targetWidth').value, 10);
+      const height = parseFloat(document.getElementById('targetHeight').value, 10);
+      parent.postMessage({ pluginMessage: { type: 'resize', width, height } }, '*');
+  
+      const gcd = (a, b) => {
+        return b == 0 ? a : gcd(b, a % b);
+      };
+      const denom = gcd(width, height);
+      const ratio = `${width / denom} : ${height / denom}`;
+      document.getElementById('originRatio').innerText = ratio;
+      document.getElementById('originWidth').innerText = width;
+      document.getElementById('originHeight').innerText = height;
+    };
+    document.getElementById('clearValue').onclick = () => {
+      widthForm.value = "";
+      heightForm.value = "";
+      targetWidthForm.value = "";
+      targetHeightForm.value = "";
+    }
+    document.getElementById('switchValue').onclick = () => {
+      let temp = widthForm.value;
+      widthForm.value = heightForm.value;
+      heightForm.value = temp;
+  
+      temp = targetWidthForm.value;
+      targetWidthForm.value = targetHeightForm.value;
+      targetHeightForm.value = temp;
+    }
+  
+  </script>
+    </body>
+</html>
+
+
