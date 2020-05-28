@@ -24,6 +24,14 @@ const getData = (): void => {
 };
 
 const resizeNode = (width: number, height: number): void => {
+  if (selectedNode === undefined) {
+    figma.notify("Select more than one layer!");
+    return;
+  }
+  if (width === 0 || height === 0) {
+    figma.notify("Please enter a value!");
+    return;
+  }
   selectedNode.resize(roundFloat(width, 3), roundFloat(height, 3));
 };
 
