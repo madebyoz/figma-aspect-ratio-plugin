@@ -12,11 +12,11 @@
 
 <div class="wrapper">
 
-<div class="inspector">
-  <div class="inspector__item"><img src="./img/icon-inspector.svg"></div>  
-  <div class="inspector__item">Ratio<span id="originRatio" class="inspector__item__value">0:0</span></div>
-  <div class="inspector__item">W<span id="originWidth" class="inspector__item__value">0</span></div>
-  <div class="inspector__item">H<span id="originHeight" class="inspector__item__value">0</span></div>
+<div class="inspector"> 
+  <div class="inspector__item"><img class="inspector__icon" src="./img/icon-inspector.svg"></div>
+  <div class="inspector__item input input--with-icon"><div class="icon">R</div><input type="input" id="originRatio" class="input__field inspector__item__value" placeholder="0:0"></div>
+  <div class="inspector__item input input--with-icon"><div class="icon">W</div><input type="input" id="originWidth" class="input__field inspector__item__value" placeholder="0"></div>
+  <div class="inspector__item input input--with-icon"><div class="icon">H</div><input type="input" id="originHeight" class="input__field inspector__item__value" placeholder="0"></div>
 </div>
 
 
@@ -42,9 +42,9 @@
   <script>
     onmessage = (e) => {
       const { ratio, width, height } = e.data.pluginMessage;
-      document.getElementById('originRatio').innerText = ratio;
-      document.getElementById('originWidth').innerText = width;
-      document.getElementById('originHeight').innerText = height;
+      document.getElementById('originRatio').value = ratio;
+      document.getElementById('originWidth').value = width;
+      document.getElementById('originHeight').value = height;
     };
   
     const calculateHeight = (width, x , y) => {
@@ -74,9 +74,9 @@
       };
       const denom = gcd(width, height);
       const ratio = `${width / denom} : ${height / denom}`;
-      document.getElementById('originRatio').innerText = ratio;
-      document.getElementById('originWidth').innerText = width;
-      document.getElementById('originHeight').innerText = height;
+      document.getElementById('originRatio').value = ratio;
+      document.getElementById('originWidth').value = width;
+      document.getElementById('originHeight').value = height;
     };
     document.getElementById('clearValue').onclick = () => {
       widthForm.value = "";
