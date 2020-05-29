@@ -3,21 +3,34 @@
     justify-content: space-between;
     border-bottom: 1px solid var(--silver);;
     overflow: hidden;
-    padding: 8px 16px;
-    height: 32px;
+    padding: 4px 16px;
+    height: 40px;
     .inspector__item {
+        display: flex;
         font-size: var(--font-size-small);
-        color: var(--black3);
+        color: var(--black);
         text-align: right;
-        .inspector__item__value {
-            margin: 0 8px;
-            color: var(--black);
+        overflow: hidden;
+        align-self: center;
+        margin-left: 8px;
+        &:first-child {
+            margin-left: 0px;
         }
+        .inspector__item__value {
+            color: var(--black);
+            overflow: hidden;
+        }
+    }
+    .inspector__icon {
+        width: 32px;
+    }
+    .input__field {
+        border: none;
     }
 }
 
 .calcrator {
-    padding: 32px 16px;
+    padding: 28px 16px;
     .input {
         display: flex;
         align-items: center;
