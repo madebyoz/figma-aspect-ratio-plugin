@@ -3,5 +3,8 @@
   "id": "843423036468250072",
   "api": "1.0.0",
   "main": "code.js",
-  "ui": "index.html"
+  "ui": "index.html",
+  "relaunchButtons": [
+    {"command": "open", "name": "Open Aspect Retio", "multipleSelection": true}
+  ]
 }

@@ -2,6 +2,10 @@ let selectedNode: SceneNode;
 
 figma.showUI(__html__, { width: 320, height: 280 });
 
+figma.root.setRelaunchData({
+  open: '',
+});
+
 const gcd = (a: number, b: number): number => {
   if (!(Number.isInteger(a) && Number.isInteger(b))) {return 1;}
   return b == 0 ? a : gcd(b, a % b);
