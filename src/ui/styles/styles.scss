@@ -1,65 +1,383 @@
-.inspector {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--silver);;
-    overflow: hidden;
-    padding: 4px 16px;
-    height: 40px;
-    .inspector__item {
-        display: flex;
-        font-size: var(--font-size-small);
-        color: var(--black);
-        text-align: right;
-        overflow: hidden;
-        align-self: center;
-        margin-left: 8px;
-        &:first-child {
-            margin-left: 0px;
-        }
-        .inspector__item__value {
-            color: var(--black);
-            overflow: hidden;
-        }
-    }
-    .inspector__icon {
-        width: 32px;
-    }
-    .input__field {
-        border: none;
-    }
+// Figma Design System Variables
+:root {
+  // Colors
+  --figma-bg-primary: #ffffff;
+  --figma-bg-secondary: #f0f0f0;
+  --figma-bg-tertiary: #e5e5e5;
+  --figma-text-primary: #333333;
+  --figma-text-secondary: #666666;
+  --figma-border: #e5e5e5;
+  --figma-blue: #0d99ff;
+  --figma-blue-hover: #0b87e6;
+  --figma-blue-active: #0a75cc;
+  --figma-red: #f24822;
+  --figma-green: #36b37e;
+  --figma-yellow: #ffab00;
+  --figma-purple: #6554c0;
+  --figma-orange: #ff8f00;
+  --figma-gray: #8f8f8f;
+  --figma-gray-hover: #7a7a7a;
+  --figma-gray-active: #666666;
 }
 
-.calcrator {
-    padding: 28px 16px;
-    .input {
-        display: flex;
-        align-items: center;
-        font-size: calc(var(--font-size-xlarge) * 2);
-        .input__field {
-            text-align: center;
-            font-size: calc(var(--font-size-xlarge) * 2);
-            font-weight: 600;
-            height: 48px;
-            &:placeholder-shown {
-                    border: none;
-            }
-        }
-        .targetHeight {
-            color: var(--blue);
-        }
+// Dark theme
+[data-theme="dark"] {
+  --figma-bg-primary: #2c2c2c;
+  --figma-bg-secondary: #3c3c3c;
+  --figma-bg-tertiary: #4c4c4c;
+  --figma-text-primary: #ffffff;
+  --figma-text-secondary: #b3b3b3;
+  --figma-border: #4c4c4c;
+  --figma-blue: #0d99ff;
+  --figma-blue-hover: #0b87e6;
+  --figma-blue-active: #0a75cc;
+  --figma-red: #f24822;
+  --figma-green: #36b37e;
+  --figma-yellow: #ffab00;
+  --figma-purple: #6554c0;
+  --figma-orange: #ff8f00;
+  --figma-gray: #8f8f8f;
+  --figma-gray-hover: #7a7a7a;
+  --figma-gray-active: #666666;
+
+  .input__field {
+    background-color: transparent;
+    
+    &:focus {
+      background-color: transparent;
     }
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+// Base styles
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--figma-bg-primary);
+  color: var(--figma-text-primary);
+}
+
+.wrapper {
+  padding: 0;
+  background-color: var(--figma-bg-primary);
+}
+
+// Inspector section
+.inspector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--figma-bg-secondary);
+  border-bottom: 1px solid var(--figma-border);
+  font-size: 12px;
+  line-height: 16px;
+  gap: 8px;
+  height: 50px;
+  
+  label {
+    font-size: 12px;
+    color: var(--figma-text-secondary);
+  }
+
+  .inspector__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--figma-text-secondary);
+    width: 100%;
+
+    .inspector__item__value {
+      color: var(--figma-text-primary);
+      font-weight: 500;
+      width: 100%;
+    }
+  }
+
+  .input__field {
+    border-radius: 6px;
+  }
+}
+
+// Aspect Ratio Presets section
+.presets {
+  padding: 8px 16px;
+  background-color: var(--figma-bg-secondary);
+  border-bottom: 1px solid var(--figma-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+
+  label {
+    font-size: 12px;
+    color: var(--figma-text-secondary);
+  }
+
+  .dropdown {
+    flex-grow: 1;
+    height: 32px;
+    padding: 0 16px 0 8px;
+    border: 1px solid var(--figma-border);
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--figma-text-primary);
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    &:focus {
+      outline: none;
+      border-color: var(--figma-blue);
+    }
+  }
+}
+
+.dropdown-arrow {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--figma-text-secondary);
+}
+
+// Calculator section
+.calculator {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 200px;
+
+  /* Container for inputs */
+  .input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Gap between inputs */
+  }
+
+  .input {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .input__field {
+    width: 100%;
+    height: 64px;
+    text-align: center;
+    border: none;
+    background: none;
+    color: var(--figma-text-primary);
+    outline: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+// Only in calculator, make input fields large and bold
+.calculator .input__field {
+  font-size: 48px;
+  font-weight: bold;
+  cursor: text;
+}
+
+.input__field--top {
+  color: var(--figma-text-primary);
+}
+
+.input__field--bottom.input__field--blue {
+  color: var(--figma-blue);
+}
+
+.input__field::placeholder {
+  color: var(--figma-text-secondary);
+  opacity: 1;
+}
+
+// Add transparent background to input fields
+.input__field {
+  background-color: transparent;
+}
+
+.colon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: bold;
+  color: var(--figma-text-primary);
+  height: 64px;
+  width: 32px;
+  user-select: none;
+  line-height: 1.2;
 }
 
 .divider {
-    width: 100%;
-    height: 1px;
-    background-color: var(--silver);
-    margin: 16px 0;
+  width: 100%;
+  height: 2px;
+  background: var(--figma-border);
+  margin: 48px 0;
 }
 
+// Divider
+.divider {
+  height: 1px;
+  background-color: var(--figma-border);
+  margin: 8px 0;
+}
+
+// Action bar
 .actionBar {
-    display: flex;
-    justify-content: space-between;
-    border-top: 1px solid var(--silver);;
-    padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: var(--figma-bg-secondary);
+  border-top: 1px solid var(--figma-border);
+  height: 50px;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .button--secondary {
+    background: transparent;
+    color: var(--figma-text-primary);
+    border: 1px solid var(--figma-border);
+    transition: background 0.2s, color 0.2s;
+
+    &:hover {
+      background: var(--figma-bg-tertiary);
+      color: var(--figma-blue);
+    }
+    &:active {
+      background: var(--figma-bg-secondary);
+      color: var(--figma-blue-active);
+    }
+    &:disabled {
+      color: var(--figma-gray);
+      background: transparent;
+    }
+  }
+
+  button.button--primary {
+    text-align: center;
+  }
+}
+
+// Icons
+.icon {
+  width: 16px;
+  height: 16px;
+  color: var(--figma-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+// Theme toggle button
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 2px;
+  background-color: var(--figma-bg-secondary);
+  color: var(--figma-text-secondary);
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: var(--figma-bg-tertiary);
+    color: var(--figma-text-primary);
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 0;
+  }
+
+  .sun-icon {
+    display: block;
+  }
+
+  .moon-icon {
+    display: none;
+  }
+
+  [data-theme="dark"] & {
+    .sun-icon {
+      display: none;
+    }
+
+    .moon-icon {
+      display: block;
+    }
+  }
+}
+
+.theme-switch {
+  width: auto;
+  padding: 0 8px;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  background-color: var(--figma-bg-secondary);
+  border-radius: 2px;
+
+  &:hover {
+    background-color: var(--figma-bg-tertiary);
+    color: var(--figma-text-primary);
+  }
+
+  .icon {
+    margin-right: 0;
+  }
+}
+
+.theme-switch .theme-icon-dark {
+  display: none;
+}
+
+[data-theme="dark"] .theme-switch .theme-icon-light {
+  display: none;
+}
+
+[data-theme="dark"] .theme-switch .theme-icon-dark {
+  display: block;
+}
+
+// Set background color of inspector inputs and presets dropdown to border color in light mode
+.inspector .input__item input.input__field,
+.presets .dropdown {
+  background-color: var(--figma-border);
+  border-radius: 6px;
+}
+
+// Set border-radius for inspector inputs
+.inspector .input__item input.input__field {
+  border-radius: 6px;
 }

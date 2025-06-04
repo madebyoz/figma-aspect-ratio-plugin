@@ -3,5 +3,24 @@
   "id": "843423036468250072",
   "api": "1.0.0",
   "main": "code.js",
-  "ui": "index.html"
+  "ui": "index.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  },
+  "documentAccess": "dynamic-page",
+  "permissions": [],
+  "capabilities": [],
+  "parameterOnly": false,
+  "enableProposedApi": false,
+  "menu": [
+    {
+      "name": "Run Plugin",
+      "command": "run"
+    },
+    {
+      "name": "Help",
+      "command": "help"
+    }
+  ]
 }

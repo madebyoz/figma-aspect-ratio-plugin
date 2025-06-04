@@ -2,7 +2,7 @@
 const { src, dest, watch, series, parallel } = require('gulp');
 
 // gulp plugins
-const sass = require('gulp-sass'); //import SCSS compiler
+const sass = require('gulp-sass')(require('sass')); //import SCSS compiler
 const concat = require('gulp-concat'); //enables gulp to concatenate multiple JS files into one
 const minify = require('gulp-minify'); //minifies JS
 const postcss = require('gulp-postcss'); //handles processing of CSS and enables use of cssnano and autoprefixer
@@ -15,15 +15,15 @@ const inlinesource = require('gulp-inline-source'); //inline js and css and imag
 const htmlmin = require('gulp-htmlmin'); //minify html
 
 //for signalling dev vs. prod build
-const util = require('gulp-util'); //enables a dev and production build with minification
-var production = !!util.env.production; //this keeps track of whether or not we are doing a normal or priduction build
+const production = process.argv.includes('--production'); //this keeps track of whether or not we are doing a normal or production build
+const noop = () => require('through2').obj(); // a no-op stream for gulp pipes
 
 //clean up post build
 const purgecss = require('gulp-purgecss'); //remove unused css
-const del = require('del'); //plugin to delete temp files after build
+const { deleteAsync } = require('del'); //plugin to delete temp files after build
 
 // TS Config
-const tsProject = ts.createProject('tsconfig.json', { noImplicitAny: true, outFile: 'code.js' });
+const tsProject = ts.createProject('tsconfig.json', { noImplicitAny: true, noEmitOnError: false });
 
 // File paths
 const files = { 
@@ -42,7 +42,7 @@ function scssTask(){
         .pipe(replace('background-image: url(', 'background-image: inline('))
         .pipe(base64('')) //base 64 encode any background images
         .pipe(postcss([ autoprefixer()])) // PostCSS plugins
-        .pipe(production ? csso() : util.noop()) //minify css on production build
+        .pipe(production ? csso() : noop()) //minify css on production build
         .pipe(dest('src/ui/tmp') //put in temporary directory
     ); 
 }
@@ -53,8 +53,8 @@ function cssTask() {
         .pipe(production ? purgecss({
             content: ['src/ui/index.html', 'src/ui/tmp/scripts.js'],
             whitelistPatterns: [/select-menu(.*)/],
-        }) : util.noop()) //remove unused CSS
-       .pipe(production ? csso() : util.noop()) //minify css on production build
+        }) : noop()) //remove unused CSS
+       .pipe(production ? csso() : noop()) //minify css on production build
         .pipe(dest('src/ui/tmp') //put in temporary directory
     );
 }
@@ -71,12 +71,13 @@ function jsTask(){
 function tsTask() {
     return src([files.tsPath])
         .pipe(tsProject())
+        .on('error', function() { this.emit('end'); })
         .pipe(production ? minify({
             ext: {
                 min: '.js'
             },
             noSource: true
-        }) : util.noop())
+        }) : noop())
         .pipe(dest('dist'));
 }
 
@@ -88,46 +89,27 @@ function htmlTask() {
             compress: production ? true : false,
             pretty: true
         }))
-       .pipe(production ? htmlmin({ collapseWhitespace: true }) : util.noop())
+        .pipe(production ? htmlmin({ collapseWhitespace: true }) : noop())
         .pipe(dest('dist'));
 }
 
 //Clean up temporary files
 function cleanUp() {
-    return del(['src/ui/tmp']);
+    return deleteAsync(['src/ui/tmp']);
 }
 
 //copy manifest file to dist
 function manifestTask() {
     return src([files.manifest])
-        .pipe(dest('dist')
-    );
-}
-
-
-// Watch all key files for changes, if there is a change saved, create a build 
-function watchTask(){
-    watch([files.scssPath, files.jsPath, files.tsPath, files.html, files.manifest],
-        {interval: 1000, usePolling: true}, 
-        series(
-            parallel(jsTask, tsTask),
-            scssTask,
-            cssTask,
-            htmlTask,
-            manifestTask,
-            cleanUp
-        )
-    );    
+        .pipe(dest('dist'));
 }
 
 // Export the default Gulp task so it can be run
-// Runs the scss, js, and typescript tasks simultaneously
 exports.default = series(
+    cleanUp,
     parallel(jsTask, tsTask),
     scssTask,
     cssTask,
     htmlTask,
-    manifestTask,
-    cleanUp,
-    watchTask
+    manifestTask
 );
